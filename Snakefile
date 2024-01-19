@@ -3,7 +3,7 @@ GENOME = ["ecoli-rel606"]
 
 rule make_bams:
     input:
-        expand("outputs/{sample}.x.{genome}.bam.sorted",
+        expand("outputs/{sample}.x.{genome}.bam.sorted.bai",
                sample=SAMPLES, genome=GENOME)
 
 rule map_reads:
@@ -27,6 +27,13 @@ rule sort_bam:
     output: "outputs/{reads}.x.{genome}.bam.sorted"
     shell: """
         samtools sort {input} > {output}
+    """
+
+rule index_bam:
+    input: "outputs/{reads}.x.{genome}.bam.sorted"
+    output: "outputs/{reads}.x.{genome}.bam.sorted.bai"
+    shell: """
+        samtools index {input}
     """
 
 rule uncompress_genome:
