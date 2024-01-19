@@ -26,7 +26,7 @@ rule sam_to_bam:
     input: "outputs/{reads}.x.{genome}.sam",
     output: "outputs/{reads}.x.{genome}.bam",
     shell: """
-        samtools view -b -F 4 {input} > {output}
+        samtools view -b {input} > {output}
      """
 
 rule sort_bam:
