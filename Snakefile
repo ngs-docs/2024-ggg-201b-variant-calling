@@ -52,7 +52,7 @@ rule call_variants:
         bcf="outputs/{reads}.x.{genome}.bcf",
         vcf="outputs/{reads}.x.{genome}.vcf",
     shell: """
-        bcftools mpileup -Ou -f {output.ref} {input.bam} > {output.pileup}
+        bcftools mpileup -Ou -f {input.ref} {input.bam} > {output.pileup}
         bcftools call -mv -Ob {output.pileup} -o {output.bcf}
         bcftools view {output.bcf} > {output.vcf}
     """
