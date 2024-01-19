@@ -40,7 +40,7 @@ rule uncompress_genome:
     input: "{genome}.fa.gz"
     output: "outputs/{genome}.fa"
     shell: """
-        "gunzip -k {input} > {output}
+        gunzip -k {input} > {output}
     """
 
 rule call_variants:
