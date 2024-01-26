@@ -1,10 +1,16 @@
 SAMPLES = ["SRR2584857_1"]
+SUBSET_SAMPLES = ["SRR2584857_1", "SRR2584857_1.sub100k"]
 GENOME = ["ecoli-rel606"]
 
-rule make_bams:
+rule make_vcf:
     input:
-        expand("outputs/{sample}.x.{genome}.bam.sorted.bai",
+        expand("outputs/{sample}.x.{genome}.vcf",
                sample=SAMPLES, genome=GENOME)
+
+rule make_subset_vcf:
+    input:
+        expand("outputs/{sample}.x.{genome}.vcf",
+               sample=SUBSET_SAMPLES, genome=GENOME)
 
 rule uncompress_genome:
     input: "{genome}.fa.gz"
@@ -55,4 +61,13 @@ rule call_variants:
         bcftools mpileup -Ou -f {input.ref} {input.bam} > {output.pileup}
         bcftools call -mv -Ob {output.pileup} -o {output.bcf}
         bcftools view {output.bcf} > {output.vcf}
+    """
+
+rule subset_sample_100k:
+    input:
+        "{sample}.fastq.gz",
+    output:
+        "{sample}.sub100k.fastq.gz",
+    shell: """
+        gunzip -c {input} | head -400000 | gzip -c > {output}
     """
