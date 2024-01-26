@@ -53,6 +53,7 @@ rule call_variants:
     input:
         ref="outputs/{genome}.fa",
         bam="outputs/{reads}.x.{genome}.bam.sorted",
+        bai="outputs/{reads}.x.{genome}.bam.sorted.bai",
     output:
         pileup="outputs/{reads}.x.{genome}.pileup",
         bcf="outputs/{reads}.x.{genome}.bcf",
@@ -69,5 +70,5 @@ rule subset_sample_100k:
     output:
         "{sample}.sub100k.fastq.gz",
     shell: """
-        gunzip -c {input} | head -400000 | gzip -c > {output}
+        gunzip -c {input} | head -400000 | gzip -c > {output} || true
     """
